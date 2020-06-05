@@ -21,28 +21,6 @@
       }
 }
 
-func pow(_ result:Int,_ num:Int, _ time:Int) -> Int {
-//    print(result)
-    if (time == 0) {
-        return 1
-    }
-    if (time <= 1) {
-        return result
-    }
-    let newNum = result * num
-    let newTime = time - 1
-    return pow(newNum,num, newTime)
-}
-
-func getNumList(_ node:ListNode?, _ list:[Int]) -> [Int] {
-    if (node == nil) {
-        return list
-    }
-    var list_copy = list
-    list_copy.append(node!.val)
-    return getNumList(node?.next, list_copy)
-}
-
 func setupNode(_ node:ListNode?, _ list:[Int]) -> ListNode? {
     if (list.count == 0) {
         return node
@@ -60,44 +38,77 @@ func setupNode(_ node:ListNode?, _ list:[Int]) -> ListNode? {
     }
 }
 
-func getSum(_ list:[Int]) -> Int {
-    var r = 0;
-    for i in 0..<list.count {
-        let tmp = pow(10,10, i)
-        r += list[i] * tmp
+func 给指定index加一(_ list:[Int], _ index:Int) -> [Int] {
+    if (index == list.count) {
+        return list + [1]
     }
-//    print(r)
-    return r
+    var new = list
+    new[index] += 1
+    if (new[index] >= 10) {
+        new[index] -= 10
+        return 给指定index加一(new, index + 1)
+    }
+    else {
+        return new
+    }
+}
+
+func addTwoArray(_ a1:[Int], _ a2:[Int]) -> [Int] {
+    let minCount = min(a1.count, a2.count)
+    let new1 = a1, new2 = a2
+
+    var result = [Int]()
+    var needAddOne = false
+    for i in 0..<minCount {
+        var tmp = new1[i] + new2[i]
+        if (needAddOne) {
+            tmp += 1
+            needAddOne = false
+        }
+        if (tmp > 9) {
+            tmp -= 10
+            needAddOne = true
+        }
+        result.append(tmp)
+    }
+    if (a1.count > a2.count) {
+        var arr = Array(new1[minCount...(new1.count - 1)])
+        if (needAddOne) {
+            arr = 给指定index加一(arr, 0)
+        }
+        result = result + arr
+    }
+    else if (a2.count > a1.count) {
+        var arr = Array(new2[minCount...(new2.count - 1)])
+        if (needAddOne) {
+            arr = 给指定index加一(arr, 0)
+        }
+        result = result + arr
+    }
+    else {
+        if (needAddOne) {
+            result.append(1)
+        }
+    }
+    return result
+}
+
+func getNumList(_ node:ListNode?, _ list:[Int]) -> [Int] {
+    if (node == nil) {
+        return list
+    }
+    var list_copy = list
+    list_copy.append(node!.val)
+    return getNumList(node?.next, list_copy)
 }
 
 class Solution {
     func addTwoNumbers(_ l1: ListNode?, _ l2: ListNode?) -> ListNode? {
         let a1 = getNumList(l1, [])
         let a2 = getNumList(l2, [])
-        
-        print(a1)
-        print(a2)
-        
-        let n1 = getSum(a1)
-        let n2 = getSum(a2)
-        
-        print(n1)
-        print(n2)
-        
-        var sum = n1 + n2
-        
-        var a3 = Array<Int>()
-        
-        if (sum == 0) {
-            a3 = [0]
-        }
-        else {
-            while sum != 0 {
-                let remaining = sum % 10
-                sum = sum/10
-                a3.append(remaining)
-            }
-        }
+
+        let a3 = addTwoArray(a1, a2)
+
         return setupNode(nil, a3)
     }
 }
@@ -112,22 +123,11 @@ func printNode(_ node:ListNode?) {
     
 }
 
+assert(addTwoArray([2,4,3], [5,6,4]) == [7,0,8])
+assert(addTwoArray([1,8], [0]) == [1,8])
+assert(addTwoArray([9,1], [1]) == [0,2])
+assert(addTwoArray([9,1,3], [1]) == [0,2,3])
+assert(addTwoArray([9,9], [1]) == [0,0,1])
+assert(addTwoArray([9,8], [1]) == [0,9])
+assert(addTwoArray([8,9,9], [2]) == [0,0,0,1])
 
-var l1 = ListNode(2)
-l1.next = ListNode(4)
-l1.next?.next = ListNode(3)
-
-var l2 = ListNode(5)
-l2.next = ListNode(6)
-l2.next?.next = ListNode(4)
-//
-//getNumList(l1, [])
-//getNumList(l2, [])
-//var result = Solution().addTwoNumbers(l1, l2)
-var result = Solution().addTwoNumbers(ListNode(0), ListNode(0))
-printNode(result!)
-//print(result?.val)
-//print(result?.next?.val)
-//print(result?.next?.next?.val)
-
-print(pow(10, 10, 4))

@@ -42,8 +42,7 @@ func setupNode(_ node:ListNode?, _ list:[Int]) -> ListNode? {
 func addTwoArray(_ a1:[Int], _ a2:[Int]) -> [Int] {
     let minCount = min(a1.count, a2.count)
     var new1 = a1, new2 = a2
-    new1.reverse()
-    new2.reverse()
+
     var result = [Int]()
     var needAddOne = false
     for i in 0..<minCount {
@@ -58,21 +57,36 @@ func addTwoArray(_ a1:[Int], _ a2:[Int]) -> [Int] {
         }
         result.append(tmp)
     }
-    print(result)
+//    print(result)
     if (a1.count > a2.count) {
 //        print(a1[minCount...(new1.count - 1)])
-        result = new1[minCount...(new1.count - 1)] + result
+        result = result + new1[minCount...(new1.count - 1)]
+        if (needAddOne) {
+            if (result[minCount] == 9) {
+                result[minCount] = 0
+                result.append(1)
+            }
+            else {
+                result[minCount] += 1
+            }
+        }
     }
     else if (a2.count > a1.count) {
-        result = new2[minCount...(new2.count - 1)] + result
-    }
-    if (needAddOne) {
-        if (result.count < (minCount + 1)) {
-            result.append(1)
-            print(result)
+        result = result + new2[minCount...(new2.count - 1)]
+        if (needAddOne) {
+            if (result[minCount] == 9) {
+                result[minCount] = 0
+                result.append(1)
+            }
+            else {
+                result[minCount] += 1
+            }
         }
-        else {
-            result[minCount] += result[minCount] + 1
+    }
+    // equal
+    else {
+        if (needAddOne) {
+            result.append(1)
         }
     }
 //    result.reverse()
@@ -126,6 +140,10 @@ func printNode(_ node:ListNode?) {
 //printNode(result!)
 //addTwoArray([1,2,3,4], [1,2])
 
-//addTwoArray([2,4,3], [5,6,4])
-//addTwoArray([5], [5])
-addTwoArray([1,8], [0])
+assert(addTwoArray([2,4,3], [5,6,4]) == [7,0,8])
+assert(addTwoArray([1,8], [0]) == [1,8])
+assert(addTwoArray([9,1], [1]) == [0,2])
+assert(addTwoArray([9,1,3], [1]) == [0,2,3])
+assert(addTwoArray([9,9], [1]) == [0,0,1])
+assert(addTwoArray([9,8], [1]) == [0,9])
+addTwoArray([8,9,9], [2])

@@ -106,9 +106,6 @@ class Solution {
     func addTwoNumbers(_ l1: ListNode?, _ l2: ListNode?) -> ListNode? {
         let a1 = getNumList(l1, [])
         let a2 = getNumList(l2, [])
-        
-        print(a1)
-        print(a2)
 
         let a3 = addTwoArray(a1, a2)
 

@@ -38,6 +38,21 @@ func setupNode(_ node:ListNode?, _ list:[Int]) -> ListNode? {
         return setupNode(node, Array(list.dropFirst()))
     }
 }
+
+func format(_ list:[Int], _ index:Int) -> [Int] {
+    if (index == list.count) {
+        return list + [1]
+    }
+    var new = list
+    new[index] += 1
+    if (new[index] >= 10) {
+        new[index] -= 10
+        return format(new, index + 1)
+    }
+    else {
+        return new
+    }
+}
 //4 3 2 1 21
 func addTwoArray(_ a1:[Int], _ a2:[Int]) -> [Int] {
     let minCount = min(a1.count, a2.count)
@@ -59,29 +74,18 @@ func addTwoArray(_ a1:[Int], _ a2:[Int]) -> [Int] {
     }
 //    print(result)
     if (a1.count > a2.count) {
-//        print(a1[minCount...(new1.count - 1)])
-        result = result + new1[minCount...(new1.count - 1)]
+        var arr = Array(new1[minCount...(new1.count - 1)])
         if (needAddOne) {
-            if (result[minCount] == 9) {
-                result[minCount] = 0
-                result.append(1)
-            }
-            else {
-                result[minCount] += 1
-            }
+            arr = format(arr, 0)
         }
+        result = result + arr
     }
     else if (a2.count > a1.count) {
-        result = result + new2[minCount...(new2.count - 1)]
+        var arr = Array(new2[minCount...(new2.count - 1)])
         if (needAddOne) {
-            if (result[minCount] == 9) {
-                result[minCount] = 0
-                result.append(1)
-            }
-            else {
-                result[minCount] += 1
-            }
+            arr = format(arr, 0)
         }
+        result = result + arr
     }
     // equal
     else {
@@ -147,3 +151,6 @@ assert(addTwoArray([9,1,3], [1]) == [0,2,3])
 assert(addTwoArray([9,9], [1]) == [0,0,1])
 assert(addTwoArray([9,8], [1]) == [0,9])
 addTwoArray([8,9,9], [2])
+
+format([9,9], 0)
+format([9,9,9], 0)

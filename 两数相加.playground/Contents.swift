@@ -21,7 +21,6 @@
       }
 }
 
-
 func setupNode(_ node:ListNode?, _ list:[Int]) -> ListNode? {
     if (list.count == 0) {
         return node
@@ -39,7 +38,7 @@ func setupNode(_ node:ListNode?, _ list:[Int]) -> ListNode? {
     }
 }
 
-func format(_ list:[Int], _ index:Int) -> [Int] {
+func 给指定index加一(_ list:[Int], _ index:Int) -> [Int] {
     if (index == list.count) {
         return list + [1]
     }
@@ -47,16 +46,16 @@ func format(_ list:[Int], _ index:Int) -> [Int] {
     new[index] += 1
     if (new[index] >= 10) {
         new[index] -= 10
-        return format(new, index + 1)
+        return 给指定index加一(new, index + 1)
     }
     else {
         return new
     }
 }
-//4 3 2 1 21
+
 func addTwoArray(_ a1:[Int], _ a2:[Int]) -> [Int] {
     let minCount = min(a1.count, a2.count)
-    var new1 = a1, new2 = a2
+    let new1 = a1, new2 = a2
 
     var result = [Int]()
     var needAddOne = false
@@ -72,28 +71,25 @@ func addTwoArray(_ a1:[Int], _ a2:[Int]) -> [Int] {
         }
         result.append(tmp)
     }
-//    print(result)
     if (a1.count > a2.count) {
         var arr = Array(new1[minCount...(new1.count - 1)])
         if (needAddOne) {
-            arr = format(arr, 0)
+            arr = 给指定index加一(arr, 0)
         }
         result = result + arr
     }
     else if (a2.count > a1.count) {
         var arr = Array(new2[minCount...(new2.count - 1)])
         if (needAddOne) {
-            arr = format(arr, 0)
+            arr = 给指定index加一(arr, 0)
         }
         result = result + arr
     }
-    // equal
     else {
         if (needAddOne) {
             result.append(1)
         }
     }
-//    result.reverse()
     return result
 }
 
@@ -130,27 +126,11 @@ func printNode(_ node:ListNode?) {
     
 }
 
-
-//var l1 = ListNode(2)
-//l1.next = ListNode(4)
-//l1.next?.next = ListNode(3)
-//
-//var l2 = ListNode(5)
-//l2.next = ListNode(6)
-//l2.next?.next = ListNode(4)
-//
-//
-//var result = Solution().addTwoNumbers(ListNode(0), ListNode(0))
-//printNode(result!)
-//addTwoArray([1,2,3,4], [1,2])
-
 assert(addTwoArray([2,4,3], [5,6,4]) == [7,0,8])
 assert(addTwoArray([1,8], [0]) == [1,8])
 assert(addTwoArray([9,1], [1]) == [0,2])
 assert(addTwoArray([9,1,3], [1]) == [0,2,3])
 assert(addTwoArray([9,9], [1]) == [0,0,1])
 assert(addTwoArray([9,8], [1]) == [0,9])
-addTwoArray([8,9,9], [2])
+assert(addTwoArray([8,9,9], [2]) == [0,0,0,1])
 
-format([9,9], 0)
-format([9,9,9], 0)
